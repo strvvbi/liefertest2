@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestellübersicht</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='Lieferspatz_Logo.svg') }}" alt="Logo">
+        <h1 class="center-text">Bestelldetails</h1>
+        
+        <div class="order-table">
+            {% if details %}
+                {% set order = details[0] %}
+                <p>Datum: {{ order[5] }}</p>
+                <p>Uhrzeit: {{ order[6] }}</p>
+                <p>Order ID: {{ order[9]}}</p>
+                <p>Status: {{ order[7] }} 
+                    <div class="status-buttons">
+                        <form action="/statusupdate" method="post">
+                            <div class="status-buttons">
+                                <form action="/statusupdate" method="post">
+                                    <input type="hidden" name="order_id" value="{{ order[9] }}">
+                                    <button type="submit" name="action" value="Annehmen">Annehmen</button>
+                                    <button type="submit" name="action" value="Ablehnen">Ablehnen</button>
+                                    <button type="submit" name="action" value="Versandt">Versandt</button>
+                                </form>
+                            </div>
+                            
+                            
+                        </form>
+                </div></p>
+                <p>Bemerkung: {{ order[8] }}</p>
+                
+                
+                <table>
+                    <tr>
+                        <th>Artikel</th>
+                        <th>Preis</th>
+                        <th>Anzahl</th>
+                        <th>Kategorie</th>
+                        <th>Beschreibung</th>
+                    </tr>
+                    {% for item in details %}
+                        <tr>
+                            <td>{{ item[0] }}</td>
+                            <td>{{ item[1] }}</td>
+                            <td>{{ item[4] }}</td>
+                            <td>{{ item[3] }}</td>
+                            <td>{{ item[2] }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>Keine Bestelldetails gefunden.</p>
+            {% endif %}
+            <form method="get" action="{{ url_for('restaurant_order_overview') }}">
+                <button class="action-btn centered-button" type="submit" name="newOrderBtn" value="Bestellhistorie">Bestellhistorie</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

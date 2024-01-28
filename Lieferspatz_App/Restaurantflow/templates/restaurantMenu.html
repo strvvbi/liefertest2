@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speisekarte bearbeiten</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="{{ url_for('static', filename='Lieferspatz_Logo.svg') }}" alt="Logo">
+            <h1 id="restaurant-name">{{ restaurant_name }}</h1>
+            <h2>Speisekarte bearbeiten</h2>
+        </header>
+            
+    {% for category, items in categories %}
+        <h3 class="category-heading">{{ category }}</h3>
+        <div class="category-container">
+            {% for item in items %}
+                <div class="menu-item-box">
+                    <p>{{ item[2] }} - {{ item[3] }} €</p>
+                    <p class="description">{{ item[4] }}</p>
+                    
+                    <form method="post" action="{{ url_for('update_menu') }}">
+                        <input type="hidden" name="item_id" value="{{ item[0] }}">
+                        <button type="submit" name="action" value="change">Bearbeiten</button>
+                        <button type="submit" name="action" value="remove">Entfernen</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <form method="get" action="{{ url_for('add_to_menu') }}">
+        <button class="action-btn centered-button" type="submit" name="addItem" value="addItemBtn">Speise hinzufügen</button>
+    </form>
+     
+    <form method="get" action="{{ url_for('restaurant_order_overview') }}">
+        <button class="action-btn centered-button" type="submit" name="orderHistoryBtn" value="orderHistoryBtn">Bestellhistorie</button>
+    </form>
+        
+    </div>
+</body>
+</html>
